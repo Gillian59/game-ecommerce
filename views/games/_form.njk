@@ -1,0 +1,21 @@
+<form method="POST" action="{{action}}">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" name="name" class="form-control" id="name" value="{{game.name}}">
+  </div>
+  <div class="form-group">
+    <label for="summary">Summary</label>
+    <textarea rows="8" name="summary" class="form-control" id="summary">{{game.summary}}</textarea>
+  </div>
+  <div class="form-group">
+    <label for="name">Cover URL</label>
+    <input type="text" name="cover_url" class="form-control" id="cover_url" value="{{game.cover.url}}">
+  </div>
+
+  <div class="form-group">
+    <label for="name">Platform Slugs (separate with commas)</label>
+    <input type="text" name="platform_slugs" class="form-control" id="platform_slugs" value="{{game.platforms | join(",", "slug")}}">
+  </div>
+
+  <button type="submit" class="btn btn-primary">{{callToAction}}</button>
+</form>

@@ -1,0 +1,17 @@
+{% extends "layout/index.njk" %}
+
+{% block title %}
+  <title>GD: Games - Create</title>
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="/assets/styles/platforms.css">
+{% endblock %}
+
+{% block content %}
+  <h1>Create a Game</h1>
+
+  <div class="container">
+    {% include "games/_form.njk" %}
+  </div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "layout/index.njk" %}
+
+{% block title %}
+  <title>GD: Games</title>
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="assets/styles/games.css">
+{% endblock %}
+
+{% block content %}
+
+  <div class="container mt-5 mb-5">
+    <div class="row">
+      <div class="col">
+        <h1>Games</h1>
+      </div>
+      <div class="col text-right">
+        <a href="/games/new" class="btn btn-success btn-lg">Create a Game</a>
+      </div>
+    </div>
+  </div>
+
+  <ul class="list-group mb-5">
+    {% for game in games %}
+      <li class="list-group-item d-flex position-relative row">
+        <div class="col-3">
+          <img src="{{game.cover.url}}" alt="{{game.name}} cover" class="mr-2" style="max-width: 200px; max-height: 100px;">
+        </div>
+        <h3 class="col-8">
+          <a href="/games/{{game.slug}}">{{game.name}}</a>
+        </h3>
+        <div class="col-1 game-availability">
+          {% for platform in game.platforms %}
+            <img src="{{platform.platform_logo.url}}" height="40px" width="40px" class="ml-2">
+          {% endfor %}
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "lib": ["es5", "es6", "ESNext", "DOM"],
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "include": ["**/*"],
+  "exclude": ["./build", "node_modules"]
+}

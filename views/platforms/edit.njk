@@ -1,0 +1,17 @@
+{% extends "layout/index.njk" %}
+
+{% block title %}
+  <title>GD: Platforms - Edit</title>
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="/assets/styles/platforms.css">
+{% endblock %}
+
+{% block content %}
+  <h1>Edit {{platform.name}}</h1>
+
+  <div class="container">
+    {% include "platforms/_form.njk" %}
+  </div>
+{% endblock %}

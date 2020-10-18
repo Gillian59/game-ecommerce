@@ -1,0 +1,43 @@
+{% extends "layout/index.njk" %}
+
+{% block title %}
+  <title>GD: Platforms</title>
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="/assets/styles/platforms.css">
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5 mb-5">
+    <div class="row">
+      <div class="col">
+        <h1>Platforms</h1>
+      </div>
+      <div class="col text-right">
+        <a href="/platforms/new" class="btn btn-success btn-lg">Create a Platform</a>
+      </div>
+    </div>
+  </div>
+  <div class="platforms-list row">
+    {% for platform in platforms %}
+      <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch mb-5">
+        <div class="card d-flex p-3 flex-column flex-fill">
+          <img
+            class="img-fluid mx-auto" 
+            src="{{platform.platform_logo.url}}" 
+            class="card-img-top" 
+            alt="{{platform.name}}"
+            style="max-height: 30%"/>
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+              <h5 class="card-title">{{platform.name}}</h5>
+              <p class="card-text partial-text">{{platform.summary}}</p>
+            </div>
+            <a href="/platforms/{{platform.slug}}" class="btn btn-secondary">View Games</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
