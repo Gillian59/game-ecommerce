@@ -52,6 +52,7 @@ yarn db:reset
 ### Rest client
 
 - `GET /platforms`
+- `POST /platforms`
 - `GET /platforms/:slug`
 - `GET /games/`
 - `GET /games/:slug`
