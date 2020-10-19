@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const databaseUrl = process.env.MONGODB_URI || "";
+const databaseUrl = process.env.MONGO_URL || "";
 
 const options = { useNewUrlParser: true, useUnifiedTopology: true };
 
