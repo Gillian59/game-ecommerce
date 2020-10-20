@@ -5,7 +5,7 @@
 
 ### Récupérer le code de github sur votre machine
 
-git pull origin master
+git pull origin main
 
 ### Créer une nouvelle feature ou faire un nouveau changement
 
