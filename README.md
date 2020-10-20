@@ -2,6 +2,25 @@
 
 ## Usage
 
+
+### Récupérer le code de github sur votre machine
+
+git pull origin main
+
+### Créer une nouvelle feature ou faire un nouveau changement
+
+git checkout -b nom-de-ma-branche
+
+puis on fait des modifs...
+
+puis : 
+
+git add .
+
+git commit -m "On explique ce qu'on a fait"
+
+git push
+
 ### Git and Heroku
 
 Change remotes from this project to match yours!
