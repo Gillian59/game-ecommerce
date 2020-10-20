@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import PlatformModel from "../models/platformModel";
 import slugify from "slug";
+import PlatformModel from "../models/platformModel";
 import GameModel from "../models/gameModel";
 
 const clientWantsJson = (request: Request): boolean => request.get("accept") === "application/json";
