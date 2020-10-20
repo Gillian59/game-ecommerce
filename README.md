@@ -56,5 +56,3 @@ yarn db:reset
 - `GET /platforms/:slug`
 - `GET /games/`
 - `GET /games/:slug`
-
-TEST

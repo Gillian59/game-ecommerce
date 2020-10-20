@@ -29,3 +29,15 @@
   flex-direction: column;
   justify-content: center;
 }
+
+footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  padding: 1rem !important;
+  background-color: #141414 !important;
+  color: white !important;
+}
+#nosPartenairesFotter {
+  padding-left: 1vh;
+}
