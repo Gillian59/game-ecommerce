@@ -57,7 +57,3 @@ yarn db:reset
 - `GET /games/`
 - `GET /games/:slug`
 
-TEST
-
-
-test sylvie fait 
