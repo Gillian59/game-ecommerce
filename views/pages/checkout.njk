@@ -1,0 +1,69 @@
+{% block css %}
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+      <link rel="stylesheet" href="/assets/styles/main.css" />
+      <link rel="shortcut icon" href="/assets/images/favicon.png" type="image/x-icon">
+      <link rel="stylesheet" href="/assets/styles/platforms.css">
+       <link rel="stylesheet" href="/assets/styles/login.css">
+       <link rel="stylesheet" href="/assets/styles/panier.css">
+       <link rel="stylesheet" href="/assets/styles/checkout.css">
+{% endblock %}
+
+{% include "layout/navbar.njk" %}
+
+{% block title %}
+  <title> GD: Checkout </title>
+{% endblock %}
+
+    
+        <div class="container mt-5 mb-5">
+            <h1>Etapes de paiement </h1>
+        </div>
+
+        <div class="container widthForm">
+
+
+           
+                <form class="widthForm " method="POST" action="{{action}}">
+
+
+                <div class="form-group">
+                    <label for="prix">Prix à payer :  </label>
+                    <span class="badge badge-primary badge-pill">30 Euros</span>                 
+                </div>
+
+                <div class="form-group">
+                    <label for="moyendepaiement">Moyens de paiement :  </label>
+                </div>
+                            <div>
+                                <label for="visa">   CB Visa : </label> 
+                                <input type="checkbox" id="visa" name="visa" checked> 
+                            </div>         
+               
+                            <div>     
+                                <label for="paypal">Paypal :  </label>
+                                <input type="checkbox" id="paypal" name="paypal" > 
+                                        
+                            </div>
+
+     
+                <div class="form-group">
+                    <label for="adresse">Adresse :  </label>
+                    <input type="text" class="form-control" id="adresse" placeholder="Grand place">
+                    <small id="adresse" class="form-text text-muted"></small>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Ville :  </label>
+                    <input type="text" class="form-control" id="ville" placeholder="Lille">
+                    <small id="ville" class="form-text text-muted"></small>
+                </div>
+
+                </form>
+
+            
+
+
+             <button type="submit" class="btn btn-primary">Valid your command</button> 
+        </div>
+
