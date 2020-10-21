@@ -42,6 +42,21 @@ export function show(gameModel: GameModel) {
     }
   };
 }
+export function showRandom(gameModel: GameModel) {
+  return async (request: Request, response: Response): Promise<void> => {
+    const games = await gameModel.findAll();
+    const leTableauDesScreens: any[] = [];
+
+    games.forEach((game) => {
+      if (game.screenshots) {
+        const alea: number = Math.floor(Math.random() * game.screenshots.length);
+        console.log(game.screenshots.length);
+        leTableauDesScreens.push(game.screenshots[alea]);
+      }
+    });
+    console.log(leTableauDesScreens);
+  };
+}
 
 export function list(gameModel: GameModel) {
   return async (request: Request, response: Response): Promise<void> => {

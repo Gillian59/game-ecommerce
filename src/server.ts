@@ -51,6 +51,8 @@ export function makeApp(db: Db): core.Express {
   app.post("/games/:slug", formParser, gamesController.update(gameModel, platformModel));
   app.delete("/games/:slug", jsonParser, gamesController.destroy(gameModel));
 
+  app.get("/random_games", jsonParser, gamesController.showRandom(gameModel));
+
   app.get("/*", (request, response) => {
     console.log(request.path);
     if (clientWantsJson(request)) {
