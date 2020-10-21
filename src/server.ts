@@ -58,6 +58,8 @@ export function makeApp(mongoClient: MongoClient): core.Express {
     });
   });
   app.get("/api", (_request, response) => response.render("pages/api"));
+  app.get("/sign-up", (_request, response) => response.render("pages/sign-up"));
+  app.get("/login", (_request, response) => response.render("pages/login"));
 
   app.get("/platforms", platformsController.index(platformModel));
   app.get("/platforms/new", platformsController.newPlatform());
