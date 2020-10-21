@@ -1,4 +1,4 @@
-import { Db } from "mongodb";
+import { MongoClient } from "mongodb";
 import * as core from "express-serve-static-core";
 import express from "express";
 import * as gamesController from "./controllers/games.controller";
@@ -7,19 +7,43 @@ import * as platformsController from "./controllers/platforms.controller";
 import GameModel, { Game } from "./models/gameModel";
 import PlatformModel, { Platform } from "./models/platformModel";
 import bodyParser from "body-parser";
+import session from "express-session";
+import mongoSession from "connect-mongo";
 
 const clientWantsJson = (request: express.Request): boolean => request.get("accept") === "application/json";
 
 const jsonParser = bodyParser.json();
 const formParser = bodyParser.urlencoded({ extended: true });
 
-export function makeApp(db: Db): core.Express {
+export function makeApp(mongoClient: MongoClient): core.Express {
   const app = express();
+  const db = mongoClient.db();
 
   nunjucks.configure("views", {
     autoescape: true,
     express: app,
   });
+
+  const mongoStore = mongoSession(session);
+  if (process.env.NODE_ENV === "production") {
+    app.set("trust proxy", 1);
+  }
+  const sessionParser = session({
+    secret: `${process.env.EXPRESS_SECRET}`,
+    name: "sessionId",
+    resave: false,
+    saveUninitialized: true,
+    store: new mongoStore({
+      client: mongoClient,
+    }),
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      expires: new Date(Date.now() + 3600000),
+    },
+  });
+
+  const client_id = "eEV8Ygx3isqQqYVkQp6cxA==";
+  const redirect_uri = "http://localhost:8080/";
 
   app.use("/assets", express.static("public"));
   app.set("view engine", "njk");
@@ -27,7 +51,12 @@ export function makeApp(db: Db): core.Express {
   const platformModel = new PlatformModel(db.collection<Platform>("platforms"));
   const gameModel = new GameModel(db.collection<Game>("games"));
 
-  app.get("/", (_request, response) => response.render("pages/home"));
+  // app.get("/", (_request, response) => response.render("pages/home"));
+  app.get("/", (req, res) => {
+    res.render("pages/home", {
+      login_url: `https://fewlines.connect.prod.fewlines.tech/.well-known/openid-configuration/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code`,
+    });
+  });
   app.get("/api", (_request, response) => response.render("pages/api"));
 
   app.get("/platforms", platformsController.index(platformModel));

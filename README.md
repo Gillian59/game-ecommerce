@@ -5,7 +5,7 @@
 
 ### Récupérer le code de github sur votre machine
 
-git pull origin master
+git pull origin main
 
 ### Créer une nouvelle feature ou faire un nouveau changement
 
@@ -19,7 +19,7 @@ git add .
 
 git commit -m "On explique ce qu'on a fait"
 
-git push nom-de-ma-branche (ou rien)
+git push
 
 ### Git and Heroku
 
