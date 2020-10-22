@@ -9,7 +9,7 @@ import PlatformModel, { Platform } from "./models/platformModel";
 import bodyParser from "body-parser";
 import session from "express-session";
 import mongoSession from "connect-mongo";
-import OAuth2Client, { OAuth2ClientConstructor } from "@fwl/oauth2";
+import OAuth2Client, { OAuth2ClientConstructor, decodeJWTPart } from "@fwl/oauth2";
 import * as dotenv from "dotenv";
 
 const clientWantsJson = (request: express.Request): boolean => request.get("accept") === "application/json";
@@ -66,7 +66,8 @@ export function makeApp(mongoClient: MongoClient): core.Express {
     return await oauthClient.getAuthorizationURL();
   };
 
-  app.get("/", jsonParser, gamesController.showRandom(gameModel), async (req, res) => {
+  app.get("/", async (req, res) => {
+    await gamesController.showRandom(gameModel);
     const url = await urlAuth();
     res.render("pages/home", {
       login_url: url.toString(),
@@ -79,6 +80,12 @@ export function makeApp(mongoClient: MongoClient): core.Express {
     const decoded = await oauthClient.verifyJWT(tokens.access_token, "RS256");
     console.log(decoded);
     console.log(request.session);
+    const [header, payload] = tokens.access_token.split(".");
+
+    const decodedHeader = decodeJWTPart(header);
+    const decodedPayload = decodeJWTPart(payload);
+    console.log(decodedHeader);
+    console.log(decodedPayload);
     if (request.session) {
       request.session.accessToken = tokens.access_token;
     } else {
