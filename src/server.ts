@@ -9,6 +9,8 @@ import PlatformModel, { Platform } from "./models/platformModel";
 import bodyParser from "body-parser";
 import session from "express-session";
 import mongoSession from "connect-mongo";
+import OAuth2Client, { OAuth2ClientConstructor } from "@fwl/oauth2";
+import * as dotenv from "dotenv";
 
 const clientWantsJson = (request: express.Request): boolean => request.get("accept") === "application/json";
 
@@ -18,6 +20,7 @@ const formParser = bodyParser.urlencoded({ extended: true });
 export function makeApp(mongoClient: MongoClient): core.Express {
   const app = express();
   const db = mongoClient.db();
+  dotenv.config();
 
   nunjucks.configure("views", {
     autoescape: true,
@@ -42,8 +45,16 @@ export function makeApp(mongoClient: MongoClient): core.Express {
     },
   });
 
-  const client_id = "eEV8Ygx3isqQqYVkQp6cxA==";
-  const redirect_uri = "http://localhost:8080/";
+  const oauthClientConstructorProps: OAuth2ClientConstructor = {
+    openIDConfigurationURL: `${process.env.openIDConfigurationURL}`,
+    clientID: `${process.env.clientID}`,
+    clientSecret: `${process.env.clientSecret}`,
+    redirectURI: `${process.env.redirectURI}`,
+    audience: `${process.env.audience}`,
+    scopes: ["email"],
+  };
+
+  const oauthClient = new OAuth2Client(oauthClientConstructorProps);
 
   app.use("/assets", express.static("public"));
   app.set("view engine", "njk");
@@ -51,12 +62,32 @@ export function makeApp(mongoClient: MongoClient): core.Express {
   const platformModel = new PlatformModel(db.collection<Platform>("platforms"));
   const gameModel = new GameModel(db.collection<Game>("games"));
 
+  const urlAuth = async (): Promise<URL> => {
+    return await oauthClient.getAuthorizationURL();
+  };
+
   // app.get("/", (_request, response) => response.render("pages/home"));
-  app.get("/", (req, res) => {
+  app.get("/", async (req, res) => {
+    const url = await urlAuth();
     res.render("pages/home", {
-      login_url: `https://fewlines.connect.prod.fewlines.tech/.well-known/openid-configuration/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code`,
+      login_url: url.toString(),
     });
   });
+
+  app.get("/oauth/callback", sessionParser, async (request, response) => {
+    const tokens = await oauthClient.getTokensFromAuthorizationCode(`${request.query.code}`);
+    console.log(tokens);
+    const decoded = await oauthClient.verifyJWT(tokens.access_token, "RS256");
+    console.log(decoded);
+    console.log(request.session);
+    if (request.session) {
+      request.session.accessToken = tokens.access_token;
+    } else {
+      console.log("warning, couldn't put the tokens in session");
+    }
+    response.redirect("http://localhost:8080/");
+  });
+
   app.get("/api", (_request, response) => response.render("pages/api"));
   app.get("/sign-up", (_request, response) => response.render("pages/sign-up"));
   app.get("/login", (_request, response) => response.render("pages/login"));
