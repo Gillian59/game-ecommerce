@@ -52,7 +52,6 @@ export function showRandom(gameModel: GameModel) {
     games.forEach((game) => {
       if (game.screenshots) {
         alea = Math.floor(Math.random() * game.screenshots.length);
-        console.log(game.screenshots.length);
         screenArray.push(game.screenshots[alea]);
       }
     });

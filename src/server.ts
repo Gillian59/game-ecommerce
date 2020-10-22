@@ -66,8 +66,7 @@ export function makeApp(mongoClient: MongoClient): core.Express {
     return await oauthClient.getAuthorizationURL();
   };
 
-  // app.get("/", (_request, response) => response.render("pages/home"));
-  app.get("/", async (req, res) => {
+  app.get("/", jsonParser, gamesController.showRandom(gameModel), async (req, res) => {
     const url = await urlAuth();
     res.render("pages/home", {
       login_url: url.toString(),
@@ -112,8 +111,6 @@ export function makeApp(mongoClient: MongoClient): core.Express {
   app.put("/games/:slug", jsonParser, gamesController.update(gameModel, platformModel));
   app.post("/games/:slug", formParser, gamesController.update(gameModel, platformModel));
   app.delete("/games/:slug", jsonParser, gamesController.destroy(gameModel));
-
-  app.get("/", jsonParser, gamesController.showRandom(gameModel));
 
   app.get("/*", (request, response) => {
     console.log(request.path);
