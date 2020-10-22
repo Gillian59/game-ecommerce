@@ -62,17 +62,7 @@ export function makeApp(mongoClient: MongoClient): core.Express {
   const platformModel = new PlatformModel(db.collection<Platform>("platforms"));
   const gameModel = new GameModel(db.collection<Game>("games"));
 
-  const urlAuth = async (): Promise<URL> => {
-    return await oauthClient.getAuthorizationURL();
-  };
-
-  app.get("/", async (req, res) => {
-    await gamesController.showRandom(gameModel);
-    const url = await urlAuth();
-    res.render("pages/home", {
-      login_url: url.toString(),
-    });
-  });
+  app.get("/", gamesController.showRandom(gameModel));
 
   app.get("/oauth/callback", sessionParser, async (request, response) => {
     const tokens = await oauthClient.getTokensFromAuthorizationCode(`${request.query.code}`);

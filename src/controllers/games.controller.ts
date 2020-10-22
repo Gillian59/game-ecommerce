@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import slugify from "slug";
 import PlatformModel from "../models/platformModel";
 import GameModel from "../models/gameModel";
+import OAuth2Client, { OAuth2ClientConstructor } from "@fwl/oauth2";
 
 const clientWantsJson = (request: Request): boolean => request.get("accept") === "application/json";
 
@@ -62,7 +63,26 @@ export function showRandom(gameModel: GameModel) {
         resultArray.push(screenArray[alea]);
       }
     }
-    response.render("pages/home", { resultArray });
+
+    const oauthClientConstructorProps: OAuth2ClientConstructor = {
+      openIDConfigurationURL: `${process.env.openIDConfigurationURL}`,
+      clientID: `${process.env.clientID}`,
+      clientSecret: `${process.env.clientSecret}`,
+      redirectURI: `${process.env.redirectURI}`,
+      audience: `${process.env.audience}`,
+      scopes: ["email"],
+    };
+
+    const oauthClient = new OAuth2Client(oauthClientConstructorProps);
+
+    const urlAuth = async (): Promise<URL> => {
+      return await oauthClient.getAuthorizationURL();
+    };
+
+    const url = await urlAuth();
+    const login_url = url.toString();
+
+    response.render("pages/home", { resultArray, login_url });
   };
 }
 
