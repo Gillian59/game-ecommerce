@@ -1,10 +1,13 @@
 .widthForm {
-
     width: 650px;
-    
     justify-content: center;
     display: block;
     margin-left: auto;
-    margin-right: auto
-      
-    }
+    margin-right: auto;
+    margin-bottom: 5rem;
+}
+
+.cart-title {
+    color: white;
+    margin-bottom: 2rem;
+}
