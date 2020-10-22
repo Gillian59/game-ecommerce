@@ -27,7 +27,7 @@ export function makeApp(db: Db): core.Express {
   const platformModel = new PlatformModel(db.collection<Platform>("platforms"));
   const gameModel = new GameModel(db.collection<Game>("games"));
 
-  app.get("/", (_request, response) => response.render("pages/home"));
+  //app.get("/", (_request, response) => response.render("pages/home"));
   app.get("/api", (_request, response) => response.render("pages/api"));
   app.get("/sign-up", (_request, response) => response.render("pages/sign-up"));
   app.get("/login", (_request, response) => response.render("pages/login"));
@@ -52,6 +52,8 @@ export function makeApp(db: Db): core.Express {
   app.put("/games/:slug", jsonParser, gamesController.update(gameModel, platformModel));
   app.post("/games/:slug", formParser, gamesController.update(gameModel, platformModel));
   app.delete("/games/:slug", jsonParser, gamesController.destroy(gameModel));
+
+  app.get("/", jsonParser, gamesController.showRandom(gameModel));
 
   app.get("/*", (request, response) => {
     console.log(request.path);
