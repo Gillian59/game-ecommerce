@@ -91,6 +91,8 @@ export function makeApp(mongoClient: MongoClient): core.Express {
   app.get("/api", (_request, response) => response.render("pages/api"));
   app.get("/sign-up", (_request, response) => response.render("pages/sign-up"));
   app.get("/login", (_request, response) => response.render("pages/login"));
+  app.get("/panier", (_request, response) => response.render("pages/panier"));
+  app.get("/checkout", (_request, response) => response.render("pages/checkout"));
 
   app.get("/platforms", platformsController.index(platformModel));
   app.get("/platforms/new", platformsController.newPlatform());
@@ -110,6 +112,8 @@ export function makeApp(mongoClient: MongoClient): core.Express {
   app.put("/games/:slug", jsonParser, gamesController.update(gameModel, platformModel));
   app.post("/games/:slug", formParser, gamesController.update(gameModel, platformModel));
   app.delete("/games/:slug", jsonParser, gamesController.destroy(gameModel));
+
+  app.get("/", jsonParser, gamesController.showRandom(gameModel));
 
   app.get("/*", (request, response) => {
     console.log(request.path);
