@@ -4,8 +4,10 @@ import express from "express";
 import * as gamesController from "./controllers/games.controller";
 import * as nunjucks from "nunjucks";
 import * as platformsController from "./controllers/platforms.controller";
+import * as cartController from "./controllers/carts.controller";
 import GameModel, { Game } from "./models/gameModel";
 import PlatformModel, { Platform } from "./models/platformModel";
+import CartModel, { Cart } from "./models/cartModel";
 import bodyParser from "body-parser";
 import session from "express-session";
 import mongoSession from "connect-mongo";
@@ -61,6 +63,7 @@ export function makeApp(mongoClient: MongoClient): core.Express {
 
   const platformModel = new PlatformModel(db.collection<Platform>("platforms"));
   const gameModel = new GameModel(db.collection<Game>("games"));
+  const cartModel = new CartModel(db.collection<Cart>("cart"));
 
   const urlAuth = async (): Promise<URL> => {
     return await oauthClient.getAuthorizationURL();
@@ -97,7 +100,8 @@ export function makeApp(mongoClient: MongoClient): core.Express {
   app.get("/api", (_request, response) => response.render("pages/api"));
   app.get("/sign-up", (_request, response) => response.render("pages/sign-up"));
   app.get("/login", (_request, response) => response.render("pages/login"));
-  app.get("/panier", (_request, response) => response.render("pages/panier"));
+  app.get("/cart", cartController.show(cartModel));
+  //app.post("/cart", cartController.create(cartModel));
   app.get("/checkout", (_request, response) => response.render("pages/checkout"));
 
   app.get("/platforms", platformsController.index(platformModel));

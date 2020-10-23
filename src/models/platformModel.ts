@@ -1,5 +1,4 @@
 import { Collection, ObjectId } from "mongodb";
-import platforms from "../../data/platforms";
 import { Game } from "./gameModel";
 
 type PlatformInput = {
