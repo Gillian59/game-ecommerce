@@ -23,6 +23,7 @@ type PlatformGame = {
 type GameWithPlatforms = {
   [key: string]: unknown;
   platforms: PlatformGame[];
+  price: number;
 };
 
 type PlatformWithGames = {
@@ -45,6 +46,7 @@ const transformGame = (game: GameData): GameWithPlatforms => {
 
   return {
     ...game,
+    price: 30,
     platforms: gamePlatforms,
   };
 };
