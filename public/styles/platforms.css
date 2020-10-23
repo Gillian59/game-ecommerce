@@ -19,6 +19,7 @@
   border: 10px solid#f0f0ff00;
   overflow: hidden; /* masque tout ce qui dépasse */
   box-shadow: 0 0.25em 0.5em rgba(204, 204, 204, 0), inset 0 0 1em 0.25em #cccccc00;
+  font-size: xx-large;
 }
 /* le bloc défilant */
 .marquee-rtl > :first-child {
@@ -26,7 +27,7 @@
   padding-right: 2em; /* un peu d'espace pour la transition */
   padding-left: 100%; /* placement à droite du conteneur */
   white-space: nowrap; /* pas de passage à la ligne */
-  animation: defilement-rtl 15s infinite linear;
+  animation: defilement-rtl 10s infinite linear;
 
   animation-name: defilement-rtl; /* référence à la règle @keyframes mise en oeuvre */
   animation-delay: 1s; /* valeur à ajuster suivant la longueur du message */
