@@ -9,7 +9,8 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
   },
   "include": ["**/*"],
   "exclude": ["./build", "node_modules"]

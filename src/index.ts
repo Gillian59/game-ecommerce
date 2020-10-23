@@ -6,7 +6,7 @@ dotenv.config();
 
 initDb()
   .then(async (client) => {
-    const app = makeApp(client.db());
+    const app = makeApp(client);
 
     app.listen(process.env.PORT, () => {
       console.log(`listen on http://localhost:${process.env.PORT}`);

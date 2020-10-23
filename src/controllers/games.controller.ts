@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import slugify from "slug";
 import PlatformModel from "../models/platformModel";
 import GameModel from "../models/gameModel";
+import OAuth2Client, { OAuth2ClientConstructor } from "@fwl/oauth2";
 
 const clientWantsJson = (request: Request): boolean => request.get("accept") === "application/json";
 
@@ -40,6 +41,48 @@ export function show(gameModel: GameModel) {
         response.status(404).render("pages/not-found");
       }
     }
+  };
+}
+export function showRandom(gameModel: GameModel) {
+  return async (request: Request, response: Response): Promise<void> => {
+    const games = await gameModel.findAll();
+    const resultArray = [];
+    const indexList: number[] = [];
+    const screenArray: any[] = [];
+    let alea: number;
+    games.forEach((game) => {
+      if (game.screenshots) {
+        alea = Math.floor(Math.random() * game.screenshots.length);
+        screenArray.push(game.screenshots[alea]);
+      }
+    });
+    while (resultArray.length < 5) {
+      alea = Math.floor(Math.random() * screenArray.length);
+      if (!indexList.includes(alea)) {
+        indexList.push(alea);
+        resultArray.push(screenArray[alea]);
+      }
+    }
+
+    const oauthClientConstructorProps: OAuth2ClientConstructor = {
+      openIDConfigurationURL: `${process.env.openIDConfigurationURL}`,
+      clientID: `${process.env.clientID}`,
+      clientSecret: `${process.env.clientSecret}`,
+      redirectURI: `${process.env.redirectURI}`,
+      audience: `${process.env.audience}`,
+      scopes: ["email"],
+    };
+
+    const oauthClient = new OAuth2Client(oauthClientConstructorProps);
+
+    const urlAuth = async (): Promise<URL> => {
+      return await oauthClient.getAuthorizationURL();
+    };
+
+    const url = await urlAuth();
+    const login_url = url.toString();
+
+    response.render("pages/home", { resultArray, login_url });
   };
 }
 

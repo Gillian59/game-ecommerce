@@ -1,0 +1,33 @@
+{% extends "layout/index.njk" %}
+
+{% block css %}
+    <link rel="stylesheet" href="/assets/styles/cart.css">
+{% endblock %}
+
+{% include "layout/navbar.njk" %}
+
+{% block title %}
+    <title> GD: Login </title>
+{% endblock %}
+
+{% block content %}
+    <div class="container widthForm mt-5">
+        <h1 class="cart-title">Panier</h1>
+        <ul class="list-group" >
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Photo jeu vidéo sélectionné par l'user et description
+            <span class="badge badge-primary badge-pill">30 Euros</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Dapibus ac facilisis in
+            <span class="badge badge-primary badge-pill">50 Euros</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Morbi leo risus
+            <span class="badge badge-primary badge-pill">15 Euros</span>
+        </li>
+        </ul>
+        <p> </p>
+        <a href="/checkout"> <button type="submit" class="btn btn-primary">Valider</button> </a>
+    </div>
+{% endblock %}
