@@ -12,13 +12,24 @@
   <div class="container mt-5 mb-5">
     <div class="row">
       <div class="col">
-        <h1>Platforms</h1>
+        <h1 id="PlatformsTitle">Platforms</h1>
       </div>
       <div class="col text-right">
         <a href="/platforms/new" class="btn btn-success btn-lg">Create a Platform</a>
       </div>
     </div>
   </div>
+
+    <div class="row justify-content-center align-items-center">
+    <div class="col 12">
+      <!-- le conteneur fenêtre -->
+      <div class="marquee-rtl">
+    <!-- le contenu défilant -->
+        <div>Choose your Platform...</div>
+      </div>
+    </div>  
+  </div>
+
   <div class="platforms-list row">
     {% for platform in platforms %}
       <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch mb-5">
