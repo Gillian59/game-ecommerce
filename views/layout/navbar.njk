@@ -25,7 +25,11 @@
         </button>
       </a>  
       <a href="/avatar"> <button type="button" class="btn btn-info" type="submit">Avatar</button></a>
-      <a href={{ login_url }}> <button type="button" class="btn btn-secondary" type="submit">Login</button></a>
+      {% if isConnected %}
+        <a href="/logout"> <button type="button" class="btn btn-secondary" type="submit">Logout</button></a>
+      {% else %}
+        <a href="{{ login_url }}"> <button type="button" class="btn btn-secondary" type="submit">Login</button></a>
+      {% endif %}
     </div>
   </div>
 </nav>

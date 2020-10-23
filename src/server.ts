@@ -5,6 +5,7 @@ import * as gamesController from "./controllers/games.controller";
 import * as nunjucks from "nunjucks";
 import * as platformsController from "./controllers/platforms.controller";
 import * as cartController from "./controllers/carts.controller";
+import * as loginController from "./controllers/login.controllers";
 import GameModel, { Game } from "./models/gameModel";
 import PlatformModel, { Platform } from "./models/platformModel";
 import CartModel, { Cart } from "./models/cartModel";
@@ -53,7 +54,7 @@ export function makeApp(mongoClient: MongoClient): core.Express {
     clientSecret: `${process.env.clientSecret}`,
     redirectURI: `${process.env.redirectURI}`,
     audience: `${process.env.audience}`,
-    scopes: ["email"],
+    scopes: ["openid", "email"],
   };
 
   const oauthClient = new OAuth2Client(oauthClientConstructorProps);
@@ -64,21 +65,32 @@ export function makeApp(mongoClient: MongoClient): core.Express {
   const platformModel = new PlatformModel(db.collection<Platform>("platforms"));
   const gameModel = new GameModel(db.collection<Game>("games"));
   const cartModel = new CartModel(db.collection<Cart>("cart"));
+  let isConnected = false;
 
-  app.get("/", gamesController.showRandom(gameModel));
+  app.get("/", sessionParser, async (request, response) => {
+    const url = await oauthClient.getAuthorizationURL();
+    console.log(request.session);
+    if (request.session) {
+      isConnected = true;
+    }
+
+    await gamesController.showRandom(gameModel, url.toString(), response, isConnected);
+  });
 
   app.get("/oauth/callback", sessionParser, async (request, response) => {
     const tokens = await oauthClient.getTokensFromAuthorizationCode(`${request.query.code}`);
-    console.log(tokens);
-    const decoded = await oauthClient.verifyJWT(tokens.access_token, "RS256");
-    console.log(decoded);
-    console.log(request.session);
-    const [header, payload] = tokens.access_token.split(".");
+    console.log("tokens :", tokens);
+    if (tokens.id_token) {
+      await oauthClient.verifyJWT(tokens.id_token, "RS256");
+      const [header, payload] = tokens.id_token.split(".");
 
-    const decodedHeader = decodeJWTPart(header);
-    const decodedPayload = decodeJWTPart(payload);
-    console.log(decodedHeader);
-    console.log(decodedPayload);
+      const decodedHeader = decodeJWTPart(header);
+      const decodedPayload = decodeJWTPart(payload);
+
+      console.log("decodedHeader :", decodedHeader);
+      console.log("decodedPayload :", decodedPayload);
+    }
+    console.log("request.session :", request.session);
     if (request.session) {
       request.session.accessToken = tokens.access_token;
     } else {
@@ -90,6 +102,7 @@ export function makeApp(mongoClient: MongoClient): core.Express {
   app.get("/api", (_request, response) => response.render("pages/api"));
   app.get("/sign-up", (_request, response) => response.render("pages/sign-up"));
   app.get("/login", (_request, response) => response.render("pages/login"));
+  app.get("/logout", sessionParser, loginController.logout());
   app.get("/cart", cartController.show(cartModel));
   //app.post("/cart", cartController.create(cartModel));
   app.get("/checkout", (_request, response) => response.render("pages/checkout"));
@@ -121,6 +134,5 @@ export function makeApp(mongoClient: MongoClient): core.Express {
       response.status(404).render("pages/not-found");
     }
   });
-
   return app;
 }
